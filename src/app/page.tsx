@@ -1,9 +1,13 @@
-import dynamic from "next/dynamic";
-
-const Map = dynamic(() => import("@/components/map/map"), {
-    ssr: false,
-});
+import Map from "@/components/map/map"
 
 export default function Home() {
-    return <Map />;
+    return(
+        <div>
+            <div>
+                <h1>Visualiser les données</h1>
+            </div>
+            <div>
+                <Map />
+            </div>
+        </div>);
 }
