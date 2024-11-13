@@ -1,8 +1,9 @@
-import {connectDatabase} from "@/libs/database"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { connectDatabase } from "@/libs/database"
 
 connectDatabase();
 
-const nextConfig = (_phase, { _defaultConfig }) => {
+const nextConfig = (_phase: any, { _defaultConfig }: any) => {
     /**
      * @type {import('next').NextConfig}
      */
