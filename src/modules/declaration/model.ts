@@ -110,4 +110,4 @@ declarationSchema.index(
     }
 );
 
-export default Mongo.model<IDeclarationDocument>("cds", declarationSchema);
+export default Mongo.model<IDeclarationDocument>("declarations", declarationSchema);

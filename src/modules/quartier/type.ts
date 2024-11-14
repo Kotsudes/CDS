@@ -1,18 +1,18 @@
 import { EGeometryTypes } from "@/modules/libs/enums"
 
-export type TVoie = {
+export type TQuartier = {
     _id: string;
     type: string;
     geometry: {
-        coordinates: [];
+        coordinates: [][];
         type: EGeometryTypes;
     };
     properties: {
-        n_sq_ar: number;
-        c_ar: number;
-        c_arinsee: number;
-        l_ar: string;
-        l_aroff: string;
+        n_sq_qu: number;
+        c_qu: number;
+        c_quinsee: number;
+        l_qu: string;
+        l_quoff: string;
         n_sq_co: number;
         surface: number;
         perimetre: number;
