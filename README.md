@@ -11,8 +11,8 @@ Pour pouvoir développer et tester la plateforme chez vous, vous devez avoir [No
 Pour installer pnpm : `npm install -g pnpm`
 
 * Pour le projet
-  * copier le `.env.example` -> `.env`
-  * Instalelr les dépendances avec `pnpm install`
+  * Copier le `.env.example` -> `.env`
+  * Installer les dépendances avec `pnpm install`
   * Lancer le serveur de test avec `pnpm run dev` pour avoir le hot-reload
 
 > pour avoir accès à l'interface en local : [http://localhost:3000](http://localhost:3000)
