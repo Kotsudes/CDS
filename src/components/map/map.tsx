@@ -3,9 +3,10 @@ import React from 'react'
 import { MapContainer, TileLayer, Polyline, Tooltip, LayersControl, LayerGroup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 import { TArrondissement } from "@/modules/arrondissement/type"
+import { TQuartier } from '@/modules/quartier/type';
 
 
-export default function Map({ arrondissements }: { arrondissements: TArrondissement[] }) {
+export default function Map({ arrondissements, quartiers }: { arrondissements: TArrondissement[], quartiers: TQuartier[] }) {
 
     return (
         <MapContainer center={[48.8589, 2.3470]} zoom={13} scrollWheelZoom={false} style={{ height: '98vh', width: '100wh' }}
@@ -22,7 +23,7 @@ export default function Map({ arrondissements }: { arrondissements: TArrondissem
                             if (coordinates && coordinates.length > 0) {
                                 const positions = coordinates.map((coord: number[]) => [coord[1], coord[0]]);
                                 return <Polyline key={arrondissement._id} color='red' opacity={0.2} fill fillColor='black' fillOpacity={0.1} positions={positions} >
-                                    <Tooltip>{arrondissement.properties.l_ar}</Tooltip>
+                                    <Tooltip sticky>{arrondissement.properties.l_ar}</Tooltip>
                                 </Polyline>
                             }
                             return null;
@@ -31,6 +32,20 @@ export default function Map({ arrondissements }: { arrondissements: TArrondissem
                 </LayersControl.Overlay>
                 <LayersControl.Overlay name="Rues">
                     <LayerGroup>
+                    </LayerGroup>
+                </LayersControl.Overlay>
+                <LayersControl.Overlay name="Quartiers">
+                    <LayerGroup>
+                        {quartiers.map((quartiers: any) => {
+                            const coordinates = quartiers.geometry.coordinates[0];
+                            if (coordinates && coordinates.length > 0) {
+                                const positions = coordinates.map((coord: number[]) => [coord[1], coord[0]]);
+                                return <Polyline key={quartiers._id} color='purple' opacity={0.2} fill fillColor='black' fillOpacity={0.1} positions={positions} >
+                                    <Tooltip sticky>{quartiers.properties.l_qu}</Tooltip>
+                                </Polyline>
+                            }
+                            return null;
+                        })}
                     </LayerGroup>
                 </LayersControl.Overlay>
                 <LayersControl.Overlay name="Évènements">
