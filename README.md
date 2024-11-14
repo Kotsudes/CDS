@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CDS
+Il s'agit d'un projet rataché à la matière Cloud Data Structure. Pour ce projet, nous avons fait le choix d'utiliser les données de l'application "DansMaRue", une application de la ville de Paris permettant de déclarer des incidants dans les rues parisiennes. Nous exploitons également certaines données de l'API de la ville de Paris notammenet des GeoJson des arrondissements, rues, ... Le but de ce projet est d'apporter une visualisation des données propres à notre projet et différente de celle de l'application "DansMaRue". 
 
-## Getting Started
+# Organisation
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# Développement
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Pour pouvoir développer et tester la plateforme chez vous, vous devez avoir Node.js (version >=20). Il vous faudra aussi MongoDB. Dans le cas où MongoDB est déjà installer vous aurez besoins de MongoDB Compass pour accéder à la BDD en local.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Pour installer pnpm : `npm install -g pnpm`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+* Pour le projet
+  * copier le `.env.example` -> `.env`
+  * Instalelr les dépendances avec `pnpm install`
+  * Lancer le serveur de test avec `pnpm run dev` pour avoir le hot-reload
 
-## Learn More
+> pour avoir accès à l'interface en local : http://localhost
 
-To learn more about Next.js, take a look at the following resources:
+# Contribution
+Pour pouvoir contribuer au développement, vous devez faire partie de l'équipe technique associée à ce projet.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Voici les étapes pour développer une feature ou régler un bug :
+* Créer une issue décrivant le problème/la fonctionnalité de façon précise mais concise
+* Crérer une branch nommée `dev-[numéro de l'issue]` et faites vos commit dessus
+* Créer une pull request en mettant au début de la description `resolv #[numéro de l'issue]`
+* Une fois la review effectuée, merger votre branche en faisant un "Squash and merge"
