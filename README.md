@@ -15,7 +15,7 @@ Pour installer pnpm : `npm install -g pnpm`
   * Instalelr les dépendances avec `pnpm install`
   * Lancer le serveur de test avec `pnpm run dev` pour avoir le hot-reload
 
-> pour avoir accès à l'interface en local : [http://localhost](http://localhost)
+> pour avoir accès à l'interface en local : [http://localhost:3000](http://localhost:3000)
 
 # Contribution
 Pour pouvoir contribuer au développement, vous devez faire partie de l'équipe technique associée à ce projet.
