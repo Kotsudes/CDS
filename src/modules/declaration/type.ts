@@ -1,10 +1,11 @@
 import { EGeometryTypes } from "@/modules/libs/enums"
+import { LatLngTuple } from "leaflet";
 
 export type TDeclaration = {
     _id: string;
     type: string;
     geometry: {
-        coordinates: [];
+        coordinates: LatLngTuple;
         type: EGeometryTypes;
     };
     properties: {

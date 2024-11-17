@@ -1,12 +1,13 @@
 "use client"
 import React from 'react'
-import { MapContainer, TileLayer, Polyline, Tooltip, LayersControl, LayerGroup } from 'react-leaflet'
+import { MapContainer, TileLayer, Polyline, Tooltip, LayersControl, LayerGroup, Circle } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 import { TArrondissement } from "@/modules/arrondissement/type"
+import { TDeclaration } from '@/modules/declaration/type';
+import { LatLngTuple } from 'leaflet';
 
 
-export default function Map({ arrondissements }: { arrondissements: TArrondissement[] }) {
-
+export default function Map({ arrondissements, declarations }: { arrondissements: TArrondissement[], declarations: TDeclaration[] }) {
     return (
         <MapContainer center={[48.8589, 2.3470]} zoom={13} scrollWheelZoom={false} style={{ height: '98vh', width: '100wh' }}
         >
@@ -17,10 +18,10 @@ export default function Map({ arrondissements }: { arrondissements: TArrondissem
             <LayersControl position="topright">
                 <LayersControl.Overlay name="Arrondissements">
                     <LayerGroup>
-                        {arrondissements.map((arrondissement: any) => {
+                        {arrondissements.map((arrondissement: TArrondissement) => {
                             const coordinates = arrondissement.geometry.coordinates[0];
                             if (coordinates && coordinates.length > 0) {
-                                const positions = coordinates.map((coord: number[]) => [coord[1], coord[0]]);
+                                const positions = coordinates.map((coord) => [coord[1], coord[0]]);
                                 return <Polyline key={arrondissement._id} color='red' opacity={0.2} fill fillColor='black' fillOpacity={0.1} positions={positions} >
                                     <Tooltip>{arrondissement.properties.l_ar}</Tooltip>
                                 </Polyline>
@@ -33,8 +34,18 @@ export default function Map({ arrondissements }: { arrondissements: TArrondissem
                     <LayerGroup>
                     </LayerGroup>
                 </LayersControl.Overlay>
-                <LayersControl.Overlay name="Évènements">
+                <LayersControl.Overlay name="Déclarations">
                     <LayerGroup>
+                        {declarations.map((declaration: TDeclaration) => {
+                            const coordinates = declaration.geometry.coordinates;
+                            if (coordinates && coordinates.length > 0) {
+                                const positions: LatLngTuple = [coordinates[1], coordinates[0]];
+                                return <Circle key={declaration._id} color='red' opacity={0.7} fill fillColor='red' fillOpacity={0.5} center={positions} radius={10}>
+                                    <Tooltip>{declaration.properties.id_dmr}</Tooltip>
+                                </Circle>
+                            }
+                            return null;
+                        })}
                     </LayerGroup>
                 </LayersControl.Overlay>
             </LayersControl>
