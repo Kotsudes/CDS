@@ -1,8 +1,8 @@
 import Declarations from "@/modules/declaration/model"
 
-export async function GET(request: Request): Promise<Response> {
-    const url = new URL(request.url);
-    const page = parseInt(url.searchParams.get('page') || '0', 10);
+export async function GET(_,urlParams): Promise<Response> {
+    const params = (await urlParams)
+    const page = (await params.params).page || 0;
     const limit = 500;
     const skip = page * limit;
 
