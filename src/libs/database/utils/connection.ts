@@ -6,10 +6,12 @@ config();
 export let db: mongoose.Connection;
 
 export async function connectDatabase() {
-    const options = {};
-    await mongoose.connect(process.env.DB_URI as string, options);
-    db = mongoose.connection;
-    console.log("Database connected");
+    if (!db) {
+        const options = {};
+        await mongoose.connect(process.env.DB_URI as string, options);
+        db = mongoose.connection;
+    }
+    return db;
 }
 
 export async function closeDatabase() {
