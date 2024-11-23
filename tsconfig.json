@@ -33,7 +33,10 @@
             ],
             "@/modules/*": [
                 "./src/modules/*"
-            ]
+            ],
+            "@/services/*": [
+                "./src/services/*"
+            ],
         },
         "target": "ES2023"
     },

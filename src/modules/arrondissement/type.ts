@@ -1,10 +1,11 @@
 import { EGeometryTypes } from "@/modules/libs/enums"
+import { LatLngExpression } from "leaflet";
 
 export type TArrondissement = {
     _id: string;
     type: string;
     geometry: {
-        coordinates: [][];
+        coordinates: LatLngExpression[][][];
         type: EGeometryTypes;
     };
     properties: {
