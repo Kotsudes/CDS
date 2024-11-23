@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Map from "@/components/map/map";
 import * as ArrondissementService from "@/services/arrondissement";
 import * as DeclarationService from "@/services/declaration";
+import * as QuartierService from "@/services/quartier";
 import { TDeclaration } from "@/modules/declaration/type";
 import { TArrondissement } from "@/modules/arrondissement/type";
 import { TQuartier } from '@/modules/quartier/type';
@@ -17,8 +18,8 @@ export default function Home() {
             const arrondissementsData = await ArrondissementService.get();
             setArrondissements(arrondissementsData);
 
-            const quartiersData = await fetch('http://localhost:3000/api/quartier');
-            const quartiers = await quartiersData.json();
+            const quartiersData = await QuartierService.get();
+            setQuartiers(quartiersData);
 
             // const declarationsData = await DeclarationService.stat();
 
