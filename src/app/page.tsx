@@ -9,6 +9,9 @@ import { TDeclaration } from "@/modules/declaration/type";
 import { TArrondissement } from "@/modules/arrondissement/type";
 import { TQuartier } from '@/modules/quartier/type';
 import { TVoie } from '@/modules/voie/type';
+import { Switch, Label, TypographyH2, TypographyH4 } from "@/components/ui";
+import { ModeToggle } from "@/components/interface/theme";
+
 
 export default function Home() {
     const [arrondissements, setArrondissements] = useState<TArrondissement[]>([]);
@@ -43,17 +46,28 @@ export default function Home() {
     }, []);
 
     return (
-        <div>
-            <div className="h-[2vh]">
-                <h1>Visualiser les données</h1>
-            </div>
-            <div>
-                <Map 
-                    arrondissements={arrondissements} 
+        <div className="grid grid-cols-[7.5fr,2.5fr]">
+            <div className="w-full h-screen">
+                <Map
+                    arrondissements={arrondissements}
                     quartiers={quartiers}
                     declarations={declarations}
                     voies={voies}
                 />
+            </div>
+            <div className="flex flex-col">
+                <div className="relative">
+                    <span className="col-span-2 text-center">
+                        <TypographyH2>Données</TypographyH2>
+                    </span>
+                    <div className="absolute top-1 right-1"><ModeToggle /></div>
+
+                </div>
+
+                <div className="grid grid-cols-2">
+                    <Label htmlFor="arrondissements" className=""><TypographyH4>Arrondissements</TypographyH4></Label>
+                    <Switch id="arrondissements" />
+                </div>
             </div>
         </div>
     );
