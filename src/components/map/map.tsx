@@ -7,9 +7,9 @@ import { TDeclaration } from '@/modules/declaration/type';
 import { LatLngTuple } from 'leaflet';
 import { TQuartier } from '@/modules/quartier/type';
 
-export default function Map({ arrondissements, declarations, quartiers }: { arrondissements: TArrondissement[], declarations: TDeclaration[],quartiers: TQuartier[] }) {
+export default function Map({ arrondissements, declarations, quartiers }: { arrondissements: TArrondissement[], declarations: TDeclaration[], quartiers: TQuartier[] }) {
     return (
-        <MapContainer center={[48.8589, 2.3470]} zoom={13} scrollWheelZoom={false} style={{ height: '98vh', width: '100wh' }}
+        <MapContainer center={[48.8589, 2.3470]} zoom={13} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}
         >
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
