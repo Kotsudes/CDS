@@ -6,8 +6,10 @@ import { TArrondissement } from "@/modules/arrondissement/type"
 import { TDeclaration } from '@/modules/declaration/type';
 import { LatLngTuple } from 'leaflet';
 import { TQuartier } from '@/modules/quartier/type';
+import { TVoie } from '@/modules/voie/type';
+import { LatLngExpression } from 'leaflet';
 
-export default function Map({ arrondissements, declarations, quartiers }: { arrondissements: TArrondissement[], declarations: TDeclaration[],quartiers: TQuartier[] }) {
+export default function Map({ arrondissements, declarations, quartiers, voies }: { arrondissements: TArrondissement[], declarations: TDeclaration[],quartiers: TQuartier[], voies: TVoie[] }) {
     return (
         <MapContainer center={[48.8589, 2.3470]} zoom={13} scrollWheelZoom={false} style={{ height: '98vh', width: '100wh' }}
         >
@@ -32,11 +34,21 @@ export default function Map({ arrondissements, declarations, quartiers }: { arro
                 </LayersControl.Overlay>
                 <LayersControl.Overlay name="Rues">
                     <LayerGroup>
+                        {voies.map((voie: TVoie) => {
+                            const coordinates = voie.geometry.coordinates;
+                            if (coordinates && coordinates.length > 0) {
+                                const positions = coordinates.map((coord: LatLngExpression[] | LatLngExpression[]) => [coord[1], coord[0]]);
+                                return <Polyline key={voie._id} color='blue' opacity={0.2} fill fillColor='black' fillOpacity={0.1} positions={positions} >
+                                    <Tooltip sticky>{voie.properties.l_longmin}</Tooltip>
+                                </Polyline>
+                            }
+                            return null;
+                        })}
                     </LayerGroup>
                 </LayersControl.Overlay>
                 <LayersControl.Overlay name="Quartiers">
                     <LayerGroup>
-                        {quartiers.map((quartiers: any) => {
+                        {quartiers.map((quartiers: TQuartier) => {
                             const coordinates = quartiers.geometry.coordinates[0];
                             if (coordinates && coordinates.length > 0) {
                                 const positions = coordinates.map((coord: number[]) => [coord[1], coord[0]]);

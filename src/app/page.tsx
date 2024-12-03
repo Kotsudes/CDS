@@ -4,14 +4,17 @@ import Map from "@/components/map/map";
 import * as ArrondissementService from "@/services/arrondissement";
 import * as DeclarationService from "@/services/declaration";
 import * as QuartierService from "@/services/quartier";
+import * as VoiesService from "@/services/voies";
 import { TDeclaration } from "@/modules/declaration/type";
 import { TArrondissement } from "@/modules/arrondissement/type";
 import { TQuartier } from '@/modules/quartier/type';
+import { TVoie } from '@/modules/voie/type';
 
 export default function Home() {
     const [arrondissements, setArrondissements] = useState<TArrondissement[]>([]);
     const [declarations, setDeclarations] = useState<TDeclaration[]>([]);
     const [quartiers, setQuartiers] = useState<TQuartier[]>([]);
+    const [voies, setVoies] = useState<TVoie[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -20,6 +23,9 @@ export default function Home() {
 
             const quartiersData = await QuartierService.get();
             setQuartiers(quartiersData);
+
+            const voiesData = await VoiesService.get();
+            setVoies(voiesData);
 
             // const declarationsData = await DeclarationService.stat();
 
@@ -46,6 +52,7 @@ export default function Home() {
                     arrondissements={arrondissements} 
                     quartiers={quartiers}
                     declarations={declarations}
+                    voies={voies}
                 />
             </div>
         </div>
