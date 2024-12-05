@@ -51,7 +51,7 @@ export default function Map({ arrondissements, declarations, quartiers, voies }:
                         {quartiers.map((quartiers: TQuartier) => {
                             const coordinates = quartiers.geometry.coordinates[0];
                             if (coordinates && coordinates.length > 0) {
-                                const positions = coordinates.map((coord: number[]) => [coord[1], coord[0]]);
+                                const positions: LatLngTuple[] = coordinates.map((coord: number[]) => [coord[1], coord[0]]);
                                 return <Polyline key={quartiers._id} color='purple' opacity={0.2} fill fillColor='black' fillOpacity={0.1} positions={positions} >
                                     <Tooltip sticky>{quartiers.properties.l_qu}</Tooltip>
                                 </Polyline>
