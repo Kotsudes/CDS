@@ -23,7 +23,7 @@ export default function Map({ arrondissements, declarations, quartiers }: { arro
                             if (coordinates && coordinates.length > 0) {
                                 const positions = coordinates.map((coord) => [coord[1], coord[0]]);
                                 return <Polyline key={arrondissement._id} color='red' opacity={0.2} fill fillColor='black' fillOpacity={0.1} positions={positions} >
-                                    <Tooltip sticky>{arrondissement.properties.l_ar}</Tooltip>
+                                    <Tooltip sticky>{arrondissement.properties.l_ar}, {arrondissement.properties.l_aroff}</Tooltip>
                                 </Polyline>
                             }
                             return null;
