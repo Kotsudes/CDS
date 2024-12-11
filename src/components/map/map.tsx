@@ -11,7 +11,7 @@ import { LatLngExpression } from 'leaflet';
 
 export default function Map({ arrondissements, declarations, quartiers, voies }: { arrondissements: TArrondissement[], declarations: TDeclaration[],quartiers: TQuartier[], voies: TVoie[] }) {
     return (
-        <MapContainer center={[48.8589, 2.3470]} zoom={13} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}
+        <MapContainer center={[48.8589, 2.3470]} zoom={13} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }} className='z-0'
         >
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

@@ -11,6 +11,8 @@ import { TQuartier } from '@/modules/quartier/type';
 import { TVoie } from '@/modules/voie/type';
 import { Switch, Label, TypographyH2, TypographyH4 } from "@/components/ui";
 import { ModeToggle } from "@/components/interface/theme";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Search } from "@/components/interface/search";
 
 
 export default function Home() {
@@ -46,7 +48,14 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="grid grid-cols-[7.5fr,2.5fr]">
+        <div className="flex flex-col">
+            <div className="flex flex-col">
+                <div className="relative h-[300px]">
+                    <Search/>
+                    <div className="absolute top-1 right-1"><ModeToggle /></div>
+
+                </div>
+            </div>
             <div className="w-full h-screen">
                 <Map
                     arrondissements={arrondissements}
@@ -54,20 +63,6 @@ export default function Home() {
                     declarations={declarations}
                     voies={voies}
                 />
-            </div>
-            <div className="flex flex-col">
-                <div className="relative">
-                    <span className="col-span-2 text-center">
-                        <TypographyH2>Données</TypographyH2>
-                    </span>
-                    <div className="absolute top-1 right-1"><ModeToggle /></div>
-
-                </div>
-
-                <div className="grid grid-cols-2">
-                    <Label htmlFor="arrondissements" className=""><TypographyH4>Arrondissements</TypographyH4></Label>
-                    <Switch id="arrondissements" />
-                </div>
             </div>
         </div>
     );
