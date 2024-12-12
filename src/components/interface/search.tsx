@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 
@@ -15,18 +15,17 @@ import {
 import { format } from "date-fns"
 import { fr } from "date-fns/locale"
 import { cn } from "@/lib/utils"
-import { CalendarIcon, Turtle, Cat, Dog, Rabbit, Fish } from 'lucide-react'
+import { CalendarIcon} from 'lucide-react'
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Calendar } from "@/components/ui/calendar"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { MultiSelect, TypographyH4 } from "@/components/ui"
-
+import * as ArrondissementService from "@/services/arrondissement";
+import * as QuartierService from "@/services/quartier";
+import * as CategoryService from "@/services/categories";
 
 
 const formSchema = z.object({
@@ -39,14 +38,36 @@ const formSchema = z.object({
 })
 
 const frameworksList = [
-    { value: "react", label: "React", icon: Turtle },
-    { value: "angular", label: "Angular", icon: Cat },
-    { value: "vue", label: "Vue", icon: Dog },
-    { value: "svelte", label: "Svelte", icon: Rabbit },
-    { value: "ember", label: "Ember", icon: Fish },
+    { value: "", label: "" },
 ];
 
 export function Search() {
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [zones, setZones] = useState<{label: string;value: string;icon?: React.ComponentType<{className?: string;}>}[]>(frameworksList)
+    const [categories, setCategories] = useState<{label: string;value: string;icon?: React.ComponentType<{className?: string;}>}[]>(frameworksList)
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+            const arrondissementsNames = (await ArrondissementService.getNames()).map((name) => {
+                return {value: name, label: name}
+            });
+            const quartiersNames = (await QuartierService.getNames()).map((name) => {
+                return {value: name, label: name}
+            });
+
+            setZones(() => [...quartiersNames, ...arrondissementsNames])
+
+            const categoriesNames = (await CategoryService.get()).map((name) => {
+                return {value: name, label: name}
+            }); 
+
+            //setCategories(() => [...categoriesNames])
+        }
+
+        fetchData()
+    }, [])
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -170,7 +191,7 @@ export function Search() {
 
                                 <FormControl>
                                     <MultiSelect
-                                        options={frameworksList}
+                                        options={zones}
                                         onValueChange={field.onChange}
                                         value={field.value}
                                         placeholder="Selectionnez des zones"
@@ -193,7 +214,7 @@ export function Search() {
 
                                 <FormControl>
                                     <MultiSelect
-                                        options={frameworksList}
+                                        options={categories}
                                         onValueChange={field.onChange}
                                         value={field.value}
                                         placeholder="Selectionnez des catégories"

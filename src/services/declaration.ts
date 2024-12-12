@@ -13,3 +13,9 @@ export async function stat(): Promise<{total:number,pages:number}> {
     const json = await result.json();
     return json.data;
 }
+
+export async function categories(): Promise<string[]> {
+    const result = await fetch(`${ApiService.baseUrl}/declaration/categories`, { method: 'GET' });
+    const json = await result.json();
+    return json.data;
+}

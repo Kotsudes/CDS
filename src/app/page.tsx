@@ -9,9 +9,7 @@ import { TDeclaration } from "@/modules/declaration/type";
 import { TArrondissement } from "@/modules/arrondissement/type";
 import { TQuartier } from '@/modules/quartier/type';
 import { TVoie } from '@/modules/voie/type';
-import { Switch, Label, TypographyH2, TypographyH4 } from "@/components/ui";
 import { ModeToggle } from "@/components/interface/theme";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Search } from "@/components/interface/search";
 
 
@@ -56,7 +54,7 @@ export default function Home() {
 
                 </div>
             </div>
-            <div className="w-full h-screen">
+            <div className="w-3/4 h-[800px] self-center">
                 <Map
                     arrondissements={arrondissements}
                     quartiers={quartiers}
