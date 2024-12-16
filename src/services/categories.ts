@@ -1,5 +1,5 @@
-import ApiService from "@/services/api";
 import { TCategory } from "@/modules/category/type";
+import ApiService from "@/services/api";
 
 export async function get(): Promise<TCategory[]> {
     const result = await fetch(`${ApiService.baseUrl}/category`, { method: 'GET' });

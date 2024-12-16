@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from "react";
+import { useSearchParams } from 'next/navigation'
 import Map from "@/components/map/map";
 import * as ArrondissementService from "@/services/arrondissement";
 import * as DeclarationService from "@/services/declaration";
@@ -14,6 +15,8 @@ import { Search } from "@/components/interface/search";
 
 
 export default function Home() {
+    const searchParams = useSearchParams()
+
     const [arrondissements, setArrondissements] = useState<TArrondissement[]>([]);
     const [declarations, setDeclarations] = useState<TDeclaration[]>([]);
     const [quartiers, setQuartiers] = useState<TQuartier[]>([]);
@@ -30,15 +33,15 @@ export default function Home() {
             const voiesData = await VoiesService.get();
             setVoies(voiesData);
 
-            // const declarationsData = await DeclarationService.stat();
-
-            //for (let i = 1; i < declarationsData.pages; i++) {
+            const zones = searchParams.get("zones")
+            const categories = searchParams.get("categories")
+            const dateDebut = searchParams.get("dateDebut")
+            const dateFin = searchParams.get("dateFin")
+            const pointDepart = searchParams.get("pointDepart")
+            const pointFin = searchParams.get("pointFin")
             for (let i = 0; i < 5; i++) {
-                const pageDeclarations = await DeclarationService.get(i);
+                const pageDeclarations = await DeclarationService.get(i, searchParams.toString());
                 setDeclarations((prevDeclarations) => [...prevDeclarations, ...pageDeclarations]);
-                /*allDeclarations = allDeclarations.concat(pageDeclarations);
-                setDeclarations([...allDeclarations]); // Mettre à jour l'état après chaque page
-                console.log(declarations)*/
             }
         };
 
@@ -49,7 +52,7 @@ export default function Home() {
         <div className="flex flex-col">
             <div className="flex flex-col">
                 <div className="relative h-[300px]">
-                    <Search/>
+                    <Search />
                     <div className="absolute top-1 right-1"><ModeToggle /></div>
 
                 </div>

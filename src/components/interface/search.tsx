@@ -15,7 +15,7 @@ import {
 import { format } from "date-fns"
 import { fr } from "date-fns/locale"
 import { cn } from "@/lib/utils"
-import { CalendarIcon} from 'lucide-react'
+import { CalendarIcon } from 'lucide-react'
 import { Input } from "@/components/ui/input"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -26,6 +26,8 @@ import { MultiSelect, TypographyH4 } from "@/components/ui"
 import * as ArrondissementService from "@/services/arrondissement";
 import * as QuartierService from "@/services/quartier";
 import * as CategoryService from "@/services/categories";
+import { useRouter } from 'next/navigation'
+
 
 
 const formSchema = z.object({
@@ -43,27 +45,29 @@ const frameworksList = [
 
 export function Search() {
 
+    const router = useRouter()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [zones, setZones] = useState<{label: string;value: string;icon?: React.ComponentType<{className?: string;}>}[]>(frameworksList)
-    const [categories, setCategories] = useState<{label: string;value: string;icon?: React.ComponentType<{className?: string;}>}[]>(frameworksList)
+    const [zones, setZones] = useState<{ label: string; value: string; icon?: React.ComponentType<{ className?: string; }> }[]>(frameworksList)
+    const [categories, setCategories] = useState<{ label: string; value: string; icon?: React.ComponentType<{ className?: string; }> }[]>(frameworksList)
 
     useEffect(() => {
 
         const fetchData = async () => {
             const arrondissementsNames = (await ArrondissementService.getNames()).map((name) => {
-                return {value: name, label: name}
+                return { value: name, label: name }
             });
             const quartiersNames = (await QuartierService.getNames()).map((name) => {
-                return {value: name, label: name}
+                return { value: name, label: name }
             });
 
             setZones(() => [...quartiersNames, ...arrondissementsNames])
 
             const categoriesNames = (await CategoryService.get()).map((name) => {
-                return {value: name, label: name}
-            }); 
+                return { value: name._id, label: name._id }
+            });
 
-            //setCategories(() => [...categoriesNames])
+
+            setCategories(() => categoriesNames)
         }
 
         fetchData()
@@ -82,9 +86,9 @@ export function Search() {
     })
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-        console.log(values)
+        // Do something with the form values.
+        // ✅ This will be type-safe and validated.
+        router.push(`/?categories=${values.categories.join("|")}&zones=${values.zones.join("|")}&dateDebut=${values.dateDebut.toISOString()}&dateFin=${values.dateFin.toISOString()}&pointDepart=${values.pointDepart.join(",")}&pointFin=${values.pointFin.join(",")}`)
     }
 
     return (
@@ -132,7 +136,7 @@ export function Search() {
                                 </Popover>
                                 <FormDescription>La date après laquelle les évènements sont comptabilisés</FormDescription>
                                 <FormMessage />
-                            </FormItem> 
+                            </FormItem>
                         )}
                     />
                     <FormField
@@ -175,10 +179,10 @@ export function Search() {
                                 </Popover>
                                 <FormDescription>La date avant laquelle les évènements sont comptabilisés</FormDescription>
                                 <FormMessage />
-                            </FormItem> 
+                            </FormItem>
                         )}
                     />
-                        
+
                 </div>
                 <div className="flex flex-col">
                     <TypographyH4>Ville</TypographyH4>
@@ -202,8 +206,8 @@ export function Search() {
                                 <FormDescription>Sélectionnez les zones où les évènements seront cherchés</FormDescription>
                                 <FormMessage />
                             </FormItem>
-                                                        
-                        )}/>
+
+                        )} />
 
                     <FormField
                         control={form.control}
@@ -225,9 +229,9 @@ export function Search() {
                                 <FormDescription>Sélectionnez les catégories des évènements à chercher</FormDescription>
                                 <FormMessage />
                             </FormItem>
-                                                        
-                        )}/>
-                    
+
+                        )} />
+
                 </div>
                 <div className="flex flex-col">
                     <TypographyH4>Points</TypographyH4>
@@ -241,13 +245,13 @@ export function Search() {
                                         <FormLabel>Longitude A</FormLabel>
 
                                         <FormControl>
-                                            <Input type="number" value={field.value} onChange={field.onChange}/>
+                                            <Input type="number" value={field.value} onChange={field.onChange} />
                                         </FormControl>
                                         <FormDescription>Entrez la longitude du premier point A</FormDescription>
                                         <FormMessage />
                                     </FormItem>
-                                </>                       
-                            )}/>
+                                </>
+                            )} />
                         <FormField
                             control={form.control}
                             name="pointDepart.1"
@@ -257,13 +261,13 @@ export function Search() {
                                         <FormLabel>Latitude A</FormLabel>
 
                                         <FormControl>
-                                            <Input type="number" value={field.value} onChange={field.onChange}/>
+                                            <Input type="number" value={field.value} onChange={field.onChange} />
                                         </FormControl>
                                         <FormDescription>Entrez la latidude du premier point A</FormDescription>
                                         <FormMessage />
                                     </FormItem>
-                                </>                       
-                            )}/>
+                                </>
+                            )} />
                     </div>
                     <div className="flex">
                         <FormField
@@ -275,13 +279,13 @@ export function Search() {
                                         <FormLabel>Longitude B</FormLabel>
 
                                         <FormControl>
-                                            <Input type="number" value={field.value} onChange={field.onChange}/>
+                                            <Input type="number" value={field.value} onChange={field.onChange} />
                                         </FormControl>
                                         <FormDescription>Entrez la longitude du premier point B</FormDescription>
                                         <FormMessage />
                                     </FormItem>
-                                </>                       
-                            )}/>
+                                </>
+                            )} />
                         <FormField
                             control={form.control}
                             name="pointFin.1"
@@ -291,21 +295,21 @@ export function Search() {
                                         <FormLabel>Latitude B </FormLabel>
 
                                         <FormControl>
-                                            <Input type="number" value={field.value} onChange={field.onChange}/>
+                                            <Input type="number" value={field.value} onChange={field.onChange} />
                                         </FormControl>
                                         <FormDescription>Entrez la latidude du premier point B</FormDescription>
                                         <FormMessage />
                                     </FormItem>
-                                </>                       
-                            )}/>
+                                </>
+                            )} />
                     </div>
-                    
+
                 </div>
                 <div className="flex flex-col">
                     <TypographyH4>Submit</TypographyH4>
                     <Button type="submit">Filtrer</Button>
                 </div>
-            </form>            
+            </form>
         </Form>
 
     )
