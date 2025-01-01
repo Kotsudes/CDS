@@ -1,22 +1,32 @@
 "use client"
 import React from 'react'
-import { MapContainer, TileLayer, Polyline, Tooltip, LayersControl, LayerGroup, Circle } from 'react-leaflet'
+import { MapContainer, TileLayer, Polyline, Tooltip, LayersControl, LayerGroup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 import { TArrondissement } from "@/modules/arrondissement/type"
-import { TDeclaration } from '@/modules/declaration/type';
 import { LatLngTuple } from 'leaflet';
 import { TQuartier } from '@/modules/quartier/type';
 import { TVoie } from '@/modules/voie/type';
 import { LatLngExpression } from 'leaflet';
+import BoxSelector from './boxSelector';
+import HeatmapLayer from "./heatmap"; 
 
-export default function Map({ arrondissements, declarations, quartiers, voies }: { arrondissements: TArrondissement[], declarations: TDeclaration[],quartiers: TQuartier[], voies: TVoie[] }) {
+export const enum POSITION_CLASSES {
+    bottomleft= 'leaflet-bottom leaflet-left',
+    bottomright= 'leaflet-bottom leaflet-right',
+    topleft= 'leaflet-top leaflet-left',
+    topright= 'leaflet-top leaflet-right',
+}
+
+
+export default function Map({ arrondissements, quartiers, voies }: { arrondissements: TArrondissement[],quartiers: TQuartier[], voies: TVoie[] }) {
     return (
-        <MapContainer center={[48.8589, 2.3470]} zoom={13} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }} className='z-0'
+        <MapContainer center={[48.8589, 2.3470]} zoom={13} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }} className='z-0' attributionControl={false}
         >
             <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            <HeatmapLayer/>
+            <BoxSelector position={POSITION_CLASSES.bottomright}/>
             <LayersControl position="topright">
                 <LayersControl.Overlay name="Arrondissements">
                     <LayerGroup>
@@ -60,22 +70,8 @@ export default function Map({ arrondissements, declarations, quartiers, voies }:
                         })}
                     </LayerGroup>
                 </LayersControl.Overlay>
-                <LayersControl.Overlay name="Déclarations">
-                    <LayerGroup>
-                        {declarations.map((declaration: TDeclaration) => {
-                            const coordinates = declaration.geometry.coordinates;
-                            if (coordinates && coordinates.length > 0) {
-                                const positions: LatLngTuple = [coordinates[1], coordinates[0]];
-                                return <Circle key={declaration._id} color='red' opacity={0.7} fill fillColor='red' fillOpacity={0.5} center={positions} radius={10}>
-                                    <Tooltip>{declaration.properties.id_dmr}</Tooltip>
-                                </Circle>
-                            }
-                            return null;
-                        })}
-                    </LayerGroup>
-                </LayersControl.Overlay>
-            </LayersControl>
-
+            </LayersControl>           
         </MapContainer>
     )
 }
+

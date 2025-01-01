@@ -75,4 +75,5 @@ const quartierSchema: Mongo.Schema = new Mongo.Schema({
     }
 });
 
-export default Mongo.model<IQuartierDocument>("quartiers", quartierSchema);
+export default Mongo.models.quartiers ||
+    Mongo.model<IQuartierDocument>("quartiers", quartierSchema);

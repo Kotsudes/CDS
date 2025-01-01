@@ -24,9 +24,9 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { MultiSelect, TypographyH4 } from "@/components/ui"
 import * as ArrondissementService from "@/services/arrondissement";
-import * as QuartierService from "@/services/quartier";
 import * as CategoryService from "@/services/categories";
 import { useRouter } from 'next/navigation'
+import { useCounterStore } from '@/providers/counter-store-provider'
 
 
 
@@ -39,69 +39,64 @@ const formSchema = z.object({
     zones: z.array(z.string()),
 })
 
-const frameworksList = [
-    { value: "", label: "" },
-];
 
 export function Search() {
 
     const router = useRouter()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [zones, setZones] = useState<{ label: string; value: string; icon?: React.ComponentType<{ className?: string; }> }[]>(frameworksList)
-    const [categories, setCategories] = useState<{ label: string; value: string; icon?: React.ComponentType<{ className?: string; }> }[]>(frameworksList)
+    const [zones, setZones] = useState<{ label: string; value: string; icon?: React.ComponentType<{ className?: string; }> }[]>([])
+    const [categories, setCategories] = useState<{ label: string; value: string; icon?: React.ComponentType<{ className?: string; }> }[]>([])
+
+    const { pointStart, pointEnd } = useCounterStore(
+        (state) => state,
+    )
 
     useEffect(() => {
-
-        const fetchData = async () => {
-            const arrondissementsNames = (await ArrondissementService.getNames()).map((name) => {
-                return { value: name, label: name }
-            });
-            const quartiersNames = (await QuartierService.getNames()).map((name) => {
-                return { value: name, label: name }
-            });
-
-            setZones(() => [...quartiersNames, ...arrondissementsNames])
-
-            const categoriesNames = (await CategoryService.get()).map((name) => {
-                return { value: name._id, label: name._id }
-            });
-
-
-            setCategories(() => categoriesNames)
-        }
-
         fetchData()
     }, [])
+
+    const fetchData = async () => {
+        const arrondissementsNames = (await ArrondissementService.get()).map((arrondissement) => {
+            return { value: String(arrondissement.properties.c_ar), label: arrondissement.properties.l_ar }
+        });
+
+        setZones(() => arrondissementsNames)
+
+        const categoriesNames = (await CategoryService.get()).map((name) => {
+            return { value: name._id, label: name._id }
+        });
+        setCategories(() => categoriesNames)
+    }
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             zones: [],
             categories: [],
-            dateDebut: new Date(),
-            dateFin: new Date(),
-            pointDepart: [0, 0],
-            pointFin: [0, 0],
+            dateDebut: new Date("2023-06-19T00:00:00.000+00:00"),
+            dateFin: new Date("2024-07-18T00:00:00.000+00:00"),
+            pointDepart: pointStart,
+            pointFin: pointEnd,
         },
     })
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        router.push(`/?categories=${values.categories.join("|")}&zones=${values.zones.join("|")}&dateDebut=${values.dateDebut.toISOString()}&dateFin=${values.dateFin.toISOString()}&pointDepart=${values.pointDepart.join(",")}&pointFin=${values.pointFin.join(",")}`)
+        router.push(`/?categories=${values.categories.join("|")}&zones=${values.zones}&dateDebut=${values.dateDebut.toISOString()}&dateFin=${values.dateFin.toISOString()}&pointDepart=${pointStart.join(",")}&pointFin=${pointEnd.join(",")}`)
     }
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-4">
-                <div className="flex flex-col">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 gap-7">
+                <div className="flex flex-col p-2">
                     <TypographyH4>Date</TypographyH4>
                     <FormField
                         control={form.control}
                         name="dateDebut"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Date de début</FormLabel>
+                                <FormLabel className="mr-2">Date de début</FormLabel>
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <FormControl>
@@ -144,7 +139,7 @@ export function Search() {
                         name="dateFin"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Date de fin</FormLabel>
+                                <FormLabel className="mr-2">Date de fin</FormLabel>
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <FormControl>
@@ -185,7 +180,7 @@ export function Search() {
 
                 </div>
                 <div className="flex flex-col">
-                    <TypographyH4>Ville</TypographyH4>
+                    <TypographyH4>Arrondissement et type</TypographyH4>
                     <FormField
                         control={form.control}
                         name="zones"
@@ -198,12 +193,12 @@ export function Search() {
                                         options={zones}
                                         onValueChange={field.onChange}
                                         value={field.value}
-                                        placeholder="Selectionnez des zones"
+                                        placeholder="Selectionnez des arrondissements"
                                         animation={2}
                                         maxCount={3}
                                     />
                                 </FormControl>
-                                <FormDescription>Sélectionnez les zones où les évènements seront cherchés</FormDescription>
+                                <FormDescription>Sélectionnez les arrondissements où les évènements seront cherchés</FormDescription>
                                 <FormMessage />
                             </FormItem>
 
@@ -235,7 +230,7 @@ export function Search() {
                 </div>
                 <div className="flex flex-col">
                     <TypographyH4>Points</TypographyH4>
-                    <div className="flex">
+                    <div className="flex gap-2">
                         <FormField
                             control={form.control}
                             name="pointDepart.0"
@@ -245,7 +240,7 @@ export function Search() {
                                         <FormLabel>Longitude A</FormLabel>
 
                                         <FormControl>
-                                            <Input type="number" value={field.value} onChange={field.onChange} />
+                                            <Input type="number" value={pointStart[0]} disabled onChange={field.onChange} />
                                         </FormControl>
                                         <FormDescription>Entrez la longitude du premier point A</FormDescription>
                                         <FormMessage />
@@ -261,7 +256,7 @@ export function Search() {
                                         <FormLabel>Latitude A</FormLabel>
 
                                         <FormControl>
-                                            <Input type="number" value={field.value} onChange={field.onChange} />
+                                            <Input type="number" value={pointStart[1]} disabled onChange={field.onChange} />
                                         </FormControl>
                                         <FormDescription>Entrez la latidude du premier point A</FormDescription>
                                         <FormMessage />
@@ -269,7 +264,7 @@ export function Search() {
                                 </>
                             )} />
                     </div>
-                    <div className="flex">
+                    <div className="flex gap-2">
                         <FormField
                             control={form.control}
                             name="pointFin.0"
@@ -279,7 +274,7 @@ export function Search() {
                                         <FormLabel>Longitude B</FormLabel>
 
                                         <FormControl>
-                                            <Input type="number" value={field.value} onChange={field.onChange} />
+                                            <Input type="number" value={pointEnd[0]} disabled onChange={field.onChange} />
                                         </FormControl>
                                         <FormDescription>Entrez la longitude du premier point B</FormDescription>
                                         <FormMessage />
@@ -295,7 +290,7 @@ export function Search() {
                                         <FormLabel>Latitude B </FormLabel>
 
                                         <FormControl>
-                                            <Input type="number" value={field.value} onChange={field.onChange} />
+                                            <Input type="number" value={pointEnd[1]} disabled onChange={field.onChange} />
                                         </FormControl>
                                         <FormDescription>Entrez la latidude du premier point B</FormDescription>
                                         <FormMessage />
