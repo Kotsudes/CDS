@@ -4,6 +4,7 @@ import L from 'leaflet';
 import "leaflet.heat";
 import { useSearchParams } from 'next/navigation'
 import ApiService from "@/services/api";
+// @ts-expect-error : Le plugin n'est pas typé
 import HeatmapOverlay from 'heatmap.js/plugins/leaflet-heatmap';
 
 
@@ -39,7 +40,7 @@ export default function HeatmapLayer({
        
 
         async function fetchDataAndUpdate() {
-            //pointsRef.current.clear();
+            pointsMap.current = new Map();
             try {
                 const response = await fetch(`${ApiService.baseUrl}/declaration/data?${ searchParams.toString()}`, {
                     method: "GET",
@@ -71,15 +72,18 @@ export default function HeatmapLayer({
                             pointsMap.current.set(key, value);
                         }
                     });
-                    
+
                     const formattedDataAlt = Array.from(pointsMap.current.entries()).map(([key, value]) => {
                         const [lat, lng] = key.split(",").map(Number);
                         return {lat: lat, lng: lng, value: value}  ;
                     }); 
 
+                    // Supprimer les anciennes données et ajouter les nouvelles
+                    
+
                     heatLayerRef2.current.setData({
                         max: 10, // Définissez une valeur max selon vos données
-                        data: formattedDataAlt || [], // Données formatées
+                        data: formattedDataAlt, // Données formatées
                     });
                 } catch (error) {
                     console.error("Erreur lors du parsing du JSON complet : ", error);
