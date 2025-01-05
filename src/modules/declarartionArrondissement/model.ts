@@ -2,16 +2,17 @@ import Mongo from "@/libs/database"
 //import { EGeometryTypes } from "@/modules/libs/enums"
 
 export interface IDecla_Arrondissement {
-    numberDeclarations : Number;
-    arrondissement: Number;
+    numberDeclarations : number;
+    arrondissement: number;
 }
 
 export interface IDeclaArrondissementDocument extends IDecla_Arrondissement, Mongo.Document { }
 
 
-const decla_arrondissementSchema: Mongo.Schema = new Mongo.Schema({
+const quartierdeclarationsSchema: Mongo.Schema = new Mongo.Schema({
     numberDeclarations: { type: Number },
     arrondissement: { type: Number }
 });
 
-export default Mongo.model<IDeclaArrondissementDocument>("declaration_per_arrondissement", decla_arrondissementSchema);
+export default Mongo.models.quartierdeclarations ||
+    Mongo.model<IDeclaArrondissementDocument>("quartierdeclarations", quartierdeclarationsSchema);

@@ -1,6 +1,6 @@
 import ApiService from "@/services/api";
 import { TVoie } from "@/modules/voie/type";
-import { TDecla_Voie } from "@/modules/declavoie/type";
+import { TDecla_Voie } from "@/modules/declarartionVoie/type";
 
 export async function get(): Promise<TVoie[]> {
     const result = await fetch(`${ApiService.baseUrl}/voie`, { method: 'GET' });

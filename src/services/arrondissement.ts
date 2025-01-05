@@ -1,6 +1,6 @@
 import ApiService from "@/services/api";
 import { TArrondissement } from "@/modules/arrondissement/type"
-import { TDecla_Arrondissement } from "@/modules/declaarr/type"
+import { TDecla_Arrondissement } from "@/modules/declarartionArrondissement/type"
 
 export async function get(): Promise<TArrondissement[]> {
     const result = await fetch(`${ApiService.baseUrl}/arrondissement`, { method: 'GET' });
