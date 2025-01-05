@@ -18,8 +18,8 @@ export type CounterStore = CounterState & CounterActions
 
 export const defaultInitState: CounterState = {
     count: 2,
-    pointStart: [2.11, 48.9],
-    pointEnd: [2.5, 48.7]
+    pointStart: [2.210, 48.807],
+    pointEnd: [2.475, 48.904]
 }
 
 export const createCounterStore = (

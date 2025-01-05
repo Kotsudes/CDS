@@ -11,8 +11,8 @@ export async function GET(request: NextRequest, params: any): Promise<Response> 
     const dateDebut = request?.nextUrl?.searchParams.get('dateDebut') || "";
     const dateFin = request?.nextUrl?.searchParams.get('dateFin') || "";
     const pointDepart: number[] = request?.nextUrl?.searchParams.get('pointDepart')?.split(',').map(Number) || [2.11, 48.9];
-
     const pointFin: number[] = request?.nextUrl?.searchParams.get('pointFin')?.split(',').map(Number) || [2.5, 48.7];
+
     try {
         const stream = new ReadableStream({
             async start(controller) {

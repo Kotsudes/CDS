@@ -27,6 +27,7 @@ import * as ArrondissementService from "@/services/arrondissement";
 import * as CategoryService from "@/services/categories";
 import { useRouter } from 'next/navigation'
 import { useCounterStore } from '@/providers/counter-store-provider'
+import { TArrondissement } from "@/modules/arrondissement/type"
 
 
 
@@ -56,7 +57,7 @@ export function Search() {
     }, [])
 
     const fetchData = async () => {
-        const arrondissementsNames = (await ArrondissementService.get()).map((arrondissement) => {
+        const arrondissementsNames = (await ArrondissementService.get()).map((arrondissement: TArrondissement) => {
             return { value: String(arrondissement.properties.c_ar), label: arrondissement.properties.l_ar }
         });
 
@@ -84,6 +85,7 @@ export function Search() {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         router.push(`/?categories=${values.categories.join("|")}&zones=${values.zones}&dateDebut=${values.dateDebut.toISOString()}&dateFin=${values.dateFin.toISOString()}&pointDepart=${pointStart.join(",")}&pointFin=${pointEnd.join(",")}`)
+        router.refresh()
     }
 
     return (

@@ -13,7 +13,7 @@ export default function HeatmapLayer({
 }) {
     const map = useMap();
     const searchParams = useSearchParams()
-    const pointsMap = useRef<Map<string,number>>(new Map())
+    const pointsMap = useRef<Map<string, number>>(new Map())
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const heatLayerRef2 = useRef<any>(null);
 
@@ -22,7 +22,7 @@ export default function HeatmapLayer({
     useEffect(() => {
         if (!map) return;
 
-        L.heatLayer([],{})
+        L.heatLayer([], {})
 
 
         const config = {
@@ -37,12 +37,12 @@ export default function HeatmapLayer({
 
         // Ajouter la couche Heatmap à la carte
         heatLayerRef2.current = new HeatmapOverlay(config).addTo(map);
-       
+
 
         async function fetchDataAndUpdate() {
             pointsMap.current = new Map();
             try {
-                const response = await fetch(`${ApiService.baseUrl}/declaration/data?${ searchParams.toString()}`, {
+                const response = await fetch(`${ApiService.baseUrl}/declaration/data?${searchParams.toString()}`, {
                     method: "GET",
                 });
 
@@ -75,11 +75,10 @@ export default function HeatmapLayer({
 
                     const formattedDataAlt = Array.from(pointsMap.current.entries()).map(([key, value]) => {
                         const [lat, lng] = key.split(",").map(Number);
-                        return {lat: lat, lng: lng, value: value}  ;
-                    }); 
+                        return { lat: lat, lng: lng, value: value };
+                    });
 
                     // Supprimer les anciennes données et ajouter les nouvelles
-                    
 
                     heatLayerRef2.current.setData({
                         max: 10, // Définissez une valeur max selon vos données
@@ -94,7 +93,7 @@ export default function HeatmapLayer({
         }
 
         fetchDataAndUpdate();
-        
+
 
         return () => {
             if (map.hasLayer(heatLayerRef2.current)) {

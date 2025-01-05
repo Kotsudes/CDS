@@ -1,33 +1,41 @@
 "use client"
 import React from 'react'
-import { MapContainer, TileLayer, Polyline, Tooltip, LayersControl, LayerGroup } from 'react-leaflet'
+import { MapContainer, TileLayer, Polyline, Tooltip, LayersControl, LayerGroup, FeatureGroup, Rectangle } from 'react-leaflet'
+import { useCounterStore } from '@/providers/counter-store-provider'
 import 'leaflet/dist/leaflet.css';
 import { TArrondissement } from "@/modules/arrondissement/type"
-import { LatLngTuple } from 'leaflet';
+import { LatLngTuple, LatLngExpression } from 'leaflet';
 import { TQuartier } from '@/modules/quartier/type';
 import { TVoie } from '@/modules/voie/type';
-import { LatLngExpression } from 'leaflet';
 import BoxSelector from './boxSelector';
-import HeatmapLayer from "./heatmap"; 
+import HeatmapLayer from "./heatmap";
 
 export const enum POSITION_CLASSES {
-    bottomleft= 'leaflet-bottom leaflet-left',
-    bottomright= 'leaflet-bottom leaflet-right',
-    topleft= 'leaflet-top leaflet-left',
-    topright= 'leaflet-top leaflet-right',
+    bottomleft = 'leaflet-bottom leaflet-left',
+    bottomright = 'leaflet-bottom leaflet-right',
+    topleft = 'leaflet-top leaflet-left',
+    topright = 'leaflet-top leaflet-right',
 }
 
 
-export default function Map({ arrondissements, quartiers, voies }: { arrondissements: TArrondissement[],quartiers: TQuartier[], voies: TVoie[] }) {
+export default function Map({ arrondissements, quartiers, voies }: { arrondissements: TArrondissement[], quartiers: TQuartier[], voies: TVoie[] }) {
+
+    const { pointStart, pointEnd } = useCounterStore((state) => state)
     return (
         <MapContainer center={[48.8589, 2.3470]} zoom={13} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }} className='z-0' attributionControl={false}
         >
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <HeatmapLayer/>
-            <BoxSelector position={POSITION_CLASSES.bottomright}/>
+            <HeatmapLayer />
+            <BoxSelector position={POSITION_CLASSES.bottomright} />
             <LayersControl position="topright">
+                <LayersControl.Overlay name="Zone sélectionnée">
+                    <LayerGroup>
+                        <Rectangle bounds={[[pointStart[1], pointStart[0]], [pointEnd[1], pointEnd[0]]]} fillOpacity={0.1} opacity={0.1} />
+                    </LayerGroup>
+                </LayersControl.Overlay>
+
                 <LayersControl.Overlay name="Arrondissements">
                     <LayerGroup>
                         {arrondissements.map((arrondissement: TArrondissement) => {
@@ -70,7 +78,8 @@ export default function Map({ arrondissements, quartiers, voies }: { arrondissem
                         })}
                     </LayerGroup>
                 </LayersControl.Overlay>
-            </LayersControl>           
+            </LayersControl>
+
         </MapContainer>
     )
 }
