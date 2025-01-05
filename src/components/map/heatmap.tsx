@@ -27,7 +27,7 @@ export default function HeatmapLayer({
 
         const config = {
             radius: 0.0005, // Rayon des points
-            maxOpacity: 0.3, // Opacité maximale
+            maxOpacity: 0.5, // Opacité maximale
             scaleRadius: true, // Adapte le rayon selon le zoom
             useLocalExtrema: true, // Extrema local pour l'affichage
             latField: 'lat',

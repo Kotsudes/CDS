@@ -75,4 +75,5 @@ const arrondissementSchema: Mongo.Schema = new Mongo.Schema({
     }
 });
 
-export default Mongo.model<IArrondissementDocument>("arrondissements", arrondissementSchema);
+export default Mongo.models.arrondissements ||
+    Mongo.model<IArrondissementDocument>("arrondissements", arrondissementSchema);
