@@ -9,10 +9,10 @@ export interface IDecla_Arrondissement {
 export interface IDeclaArrondissementDocument extends IDecla_Arrondissement, Mongo.Document { }
 
 
-const quartierdeclarationsSchema: Mongo.Schema = new Mongo.Schema({
+const arrondissementdeclarationsSchema: Mongo.Schema = new Mongo.Schema({
     numberDeclarations: { type: Number },
     arrondissement: { type: Number }
 });
 
 export default Mongo.models.quartierdeclarations ||
-    Mongo.model<IDeclaArrondissementDocument>("quartierdeclarations", quartierdeclarationsSchema);
+    Mongo.model<IDeclaArrondissementDocument>("arrondissementdeclarations", arrondissementdeclarationsSchema);
