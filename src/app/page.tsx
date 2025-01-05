@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Map from "@/components/map/map";
 import MyBarChart from "@/components/chart/chart";
+import MyTop10 from "@/components/chart/top10";
 import * as ArrondissementService from "@/services/arrondissement";
 import * as DeclarationService from "@/services/declaration";
 import * as QuartierService from "@/services/quartier";
@@ -12,15 +13,12 @@ import { TQuartier } from '@/modules/quartier/type';
 import { TVoie } from '@/modules/voie/type';
 import { Switch, Label, TypographyH2, TypographyH4 } from "@/components/ui";
 import { ModeToggle } from "@/components/interface/theme";
-import * as CategoryService from "@/services/category";
-import { TCategory } from "@/modules/category/type";
 
 export default function Home() {
     const [arrondissements, setArrondissements] = useState<TArrondissement[]>([]);
     const [declarations, setDeclarations] = useState<TDeclaration[]>([]);
     const [quartiers, setQuartiers] = useState<TQuartier[]>([]);
     const [voies, setVoies] = useState<TVoie[]>([]);
-    const [categories, setCategories] = useState<TCategory[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,8 +40,6 @@ export default function Home() {
                 /*allDeclarations = allDeclarations.concat(pageDeclarations);
                 setDeclarations([...allDeclarations]); // Mettre à jour l'état après chaque page
                 console.log(declarations)*/
-                const categoriesData = await CategoryService.get();
-                setCategories(categoriesData);
             }
         };
 
@@ -63,7 +59,10 @@ export default function Home() {
                     />
                 </div>
                 <div className="flex-shrink-0 mt-10 ">
-                    <MyBarChart categories={categories} />
+                    <MyBarChart />
+                </div>
+                <div className="flex-shrink-0 mt-10 ">
+                    <MyTop10 />
                 </div>
             </div>
             <div className="w-full">

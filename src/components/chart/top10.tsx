@@ -2,9 +2,10 @@
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { TCategory } from "@/modules/category/type";
-import * as CategoryService from "@/services/category";
+import * as QuartierService from "@/services/quartier";
 import { useEffect, useState } from "react";
+import { TDecla_Quartier } from "@/modules/declarartionQuartier/type";
+
 
 const chartConfig = {
     declarations: {
@@ -17,32 +18,36 @@ const chartConfig = {
 } satisfies ChartConfig
 
 
-export default function MyBarChart() {
+export default function MyTop10() {
     // Count the occurrences of each type
     
     // Convert the counts object into a format usable by the chart
-    const [categories, setCategories] = useState<TCategory[]>([]);
+
+    const [data, setData] = useState<TDecla_Quartier[]>();
 
     useEffect(() => {
         async function fetchData(){
-            const result = await CategoryService.get()
-            setCategories(() => result)
+            const tesQuartierQUIONTPRIS50000MILLEANSAFAIRE : TDecla_Quartier[] = await QuartierService.getTop10Quartier();
+            const result = tesQuartierQUIONTPRIS50000MILLEANSAFAIRE.map((item) => {
+                item.quartier = item.quartier + " - " + item.arrondissement+ "e"
+                return item
+            })
+            setData(() => result)
         }
-
         fetchData()
-    }, [])
+    },[])
 
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Total Declarations by Type</CardTitle>
+                <CardTitle>Top 10 Most Problematic Neighbouroods</CardTitle>
                 <CardDescription>July 2023 - July 2024</CardDescription>
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig}>
                     <BarChart
                         accessibilityLayer
-                        data={categories}
+                        data={data}
                         layout="vertical"
                         margin={{
                             right: 26,
@@ -51,7 +56,7 @@ export default function MyBarChart() {
                     >
                         <CartesianGrid horizontal={false} />
                         <YAxis
-                            dataKey="_id"
+                            dataKey="quartier"
                             type="category"
                             tickLine={false}
                             tickMargin={10}
@@ -59,7 +64,7 @@ export default function MyBarChart() {
                             //hide
                         />
                         <XAxis
-                            dataKey="count"
+                            dataKey="numberDeclarations"
                             type="number"
                             tickFormatter={(value) => value.toString()}
                         />
@@ -68,20 +73,20 @@ export default function MyBarChart() {
                             content={<ChartTooltipContent indicator="line" />}
                         />
                         <Bar
-                            dataKey="count"
+                            dataKey="numberDeclarations"
                             layout="vertical"
                             fill="var(--color-declarations)"
                             radius={4}
                         >
                             <LabelList
-                                dataKey="type"
+                                dataKey=""
                                 position="insideLeft"
                                 offset={8}
                                 className="fill-[--color-label]"
                                 fontSize={12}
                             />
                             <LabelList
-                                dataKey="count"
+                                dataKey="numberDeclarations"
                                 position="right"
                                 offset={8}
                                 className="fill-foreground"
