@@ -8,8 +8,14 @@ export async function get(): Promise<TArrondissement[]> {
     return await json.data;
 }
 
-export async function getDeclarationArr(arrondissement : Number): Promise<TDecla_Arrondissement> {
+export async function getDeclarationArr(arrondissement : number): Promise<TDecla_Arrondissement> {
     const result = await fetch(`${ApiService.baseUrl}/decla_par_arrondissement/${arrondissement}`, { method: 'GET' });
     const json = await result.json();
     return await json.data;
+}
+
+export async function getAllDeclarationArr(): Promise<TDecla_Arrondissement[]> {
+    const result = await fetch(`${ApiService.baseUrl}/decla_par_arrondissement`, { method: 'GET' });
+    const json = await result.json();
+    return await json;
 }

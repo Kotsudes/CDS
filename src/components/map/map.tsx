@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { MapContainer, TileLayer, Polyline, Tooltip, LayersControl, LayerGroup, Circle } from 'react-leaflet'
+import { MapContainer, TileLayer, Polyline, Tooltip, LayersControl, LayerGroup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 import { TArrondissement } from "@/modules/arrondissement/type"
 import { TDeclaration } from '@/modules/declaration/type';
@@ -11,13 +11,19 @@ import { LatLngExpression } from 'leaflet';
 import * as ArrondissementService from "@/services/arrondissement";
 import * as QuartierService from "@/services/quartier";
 import * as VoieService from "@/services/voies";
-import * as DeclarationService from "@/services/declaration";
+import { TDecla_Arrondissement } from '@/modules/declaarr/type';
+import { TDecla_Voie } from '../../modules/declavoie/type';
+import { TDecla_Quartier } from '../../modules/declaqua/type';
 
 
 export default function Map() {
-    const [arrondissementData, setArrondissementData] = useState<any[]>([]);
-    const [voieData, setVoieData] = useState<any[]>([]);
-    const [quartierData, setQuartierData] = useState<any[]>([]);
+    const [arrondissementData, setArrondissementData] = useState<TArrondissement[]>([]);
+    const [voieData, setVoieData] = useState<TVoie[]>([]);
+    const [quartierData, setQuartierData] = useState<TQuartier[]>([]);
+
+    const [arrondissementDecla, setArrondissementDecla] = useState<TDecla_Arrondissement[]>([]);
+    const [voieDecla, setVoieDecla] = useState<TDecla_Voie[]>([]);
+    const [quartierDecla, setQuartierDecla] = useState<TDecla_Quartier[]>([]);
     
     useEffect(() => {
         const fetchData = async () => {
@@ -26,15 +32,27 @@ export default function Map() {
                 const arrondissementsData = await ArrondissementService.get();
                 const quartiersData = await QuartierService.get();
                 const voiesData = await VoieService.get();
+
+                setArrondissementData(arrondissementsData);
+                setVoieData(voiesData);
+                setQuartierData(quartiersData);
+
+                const arronDecla = await ArrondissementService.getAllDeclarationArr();
+                const quartierDecla = await QuartierService.getAllDeclarationQua();
+                const voieDecla = await VoieService.getAllDeclarationVoie();
                 
+                setArrondissementDecla(arronDecla);
+                setVoieDecla(voieDecla);
+                setQuartierDecla(quartierDecla);
+
                 // Préparation des données supplémentaires
-                const arrondissementsWithDeclarations = await Promise.all(
+                /* const arrondissementsWithDeclarations = await Promise.all(
                     arrondissementsData.map(async (arrondissement) => ({
                         ...arrondissement,
                         declarationCount: await ArrondissementService.getDeclarationArr(arrondissement.properties.c_ar),
                     }))
                 );
-                setArrondissementData(arrondissementsWithDeclarations);
+              
 
                 const voiesWithDeclarations = await Promise.all(
                     voiesData.map(async (voie) => ({
@@ -42,15 +60,15 @@ export default function Map() {
                         declarationCount: await VoieService.getDeclarationVoie(voie.properties.l_longmin),
                     }))
                 );
-                setVoieData(voiesWithDeclarations);
+               
 
                 const quartiersWithDeclarations = await Promise.all(
                     quartiersData.map(async (quartier) => ({
                         ...quartier,
                         declarationCount: await QuartierService.getDeclarationQua(quartier.properties.l_qu),
                     }))
-                );
-                setQuartierData(quartiersWithDeclarations);
+                );*/
+              
             } catch (error) {
                 console.error("Erreur lors du chargement des données :", error);
             }
@@ -74,8 +92,9 @@ export default function Map() {
                 <LayersControl.Overlay name="Arrondissements">
                     <LayerGroup>
                         {arrondissementData.map((arrondissement) => {
+                            const data = arrondissementDecla.filter((decla)=> decla.arrondissement === arrondissement.properties.c_ar);
                             const coordinates = arrondissement.geometry.coordinates[0];
-                            if (coordinates && coordinates.length > 0) {
+                            if (coordinates && coordinates.length > 0 && data.length > 0) {
                                 const positions = coordinates.map((coord) => [coord[1], coord[0]]);
                                 return (
                                     <Polyline
@@ -88,7 +107,8 @@ export default function Map() {
                                         positions={positions}
                                     >
                                         <Tooltip sticky>
-                                            {arrondissement.properties.l_ar}, {arrondissement.declarationCount}
+                                            {arrondissement.properties.l_ar}, {data[0].numberDeclarations}
+                                           
                                         </Tooltip>
                                     </Polyline>
                                 );
@@ -100,9 +120,10 @@ export default function Map() {
                 <LayersControl.Overlay name="Rues">
                     <LayerGroup>
                         {voieData.map((voie) => {
+                            const data = voieDecla.filter((decla)=> decla.voie === voie.properties.l_longmin);
                             const coordinates = voie.geometry.coordinates;
-                            if (coordinates && coordinates.length > 0) {
-                                const positions = coordinates.map((coord: LatLngTuple) => [coord[1], coord[0]]);
+                            if (coordinates && coordinates.length > 0 && data.length > 0) {
+                                const positions = coordinates.map((coord: number[]) => [coord[1], coord[0]]);
                                 return (
                                     <Polyline
                                         key={voie._id}
@@ -114,7 +135,7 @@ export default function Map() {
                                         positions={positions}
                                     >
                                         <Tooltip sticky>
-                                            {voie.properties.l_longmin}, {voie.declarationCount}
+                                            {voie.properties.l_longmin}, {data[0].numberDeclarations}
                                         </Tooltip>
                                     </Polyline>
                                 );
@@ -126,8 +147,9 @@ export default function Map() {
                 <LayersControl.Overlay name="Quartiers">
                     <LayerGroup>
                         {quartierData.map((quartier) => {
+                            const data = quartierDecla.filter((decla)=> decla.quartier === quartier.properties.l_qu);
                             const coordinates = quartier.geometry.coordinates[0];
-                            if (coordinates && coordinates.length > 0) {
+                            if (coordinates && coordinates.length > 0 && data.length > 0) {
                                 const positions = coordinates.map((coord: number[]) => [coord[1], coord[0]]);
                                 return (
                                     <Polyline
@@ -140,7 +162,7 @@ export default function Map() {
                                         positions={positions}
                                     >
                                         <Tooltip sticky>
-                                            {quartier.properties.l_qu}, {quartier.declarationCount}
+                                            {quartier.properties.l_qu}, {data[0].numberDeclarations}
                                         </Tooltip>
                                     </Polyline>
                                 );

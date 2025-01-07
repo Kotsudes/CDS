@@ -8,8 +8,14 @@ export async function get(): Promise<TVoie[]> {
     return await json.data;
 }
 
-export async function getDeclarationVoie(voie : String): Promise<TDecla_Voie> {
+export async function getDeclarationVoie(voie : string): Promise<TDecla_Voie> {
     const result = await fetch(`${ApiService.baseUrl}/decla_par_voie/${voie}`, { method: 'GET' });
     const json = await result.json();
     return await json.data;
+}
+
+export async function getAllDeclarationVoie(): Promise<TDecla_Voie[]> {
+    const result = await fetch(`${ApiService.baseUrl}/decla_par_voie`, { method: 'GET' });
+    const json = await result.json();
+    return await json;
 }
