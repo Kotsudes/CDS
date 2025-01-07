@@ -1,5 +1,5 @@
 //import { declarationsByArrondissement } from "@/libs/database/function"
-import DeclaVoie from "@/modules/declavoie/model"
+import DeclaVoie from "@/modules/declarartionVoie/model"
 
 export async function GET(): Promise<Response> {
     const geoJSONData = await DeclaVoie.find().exec();

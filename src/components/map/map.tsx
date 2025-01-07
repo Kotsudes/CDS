@@ -4,7 +4,6 @@ import { MapContainer, TileLayer, Polyline, Tooltip, LayersControl, LayerGroup, 
 import { useCounterStore } from '@/providers/counter-store-provider'
 import 'leaflet/dist/leaflet.css';
 import { TArrondissement } from "@/modules/arrondissement/type"
-import { LatLngTuple, LatLngExpression } from 'leaflet';
 import { TQuartier } from '@/modules/quartier/type';
 import { TVoie } from '@/modules/voie/type';
 import * as ArrondissementService from "@/services/arrondissement";
@@ -15,6 +14,7 @@ import { TDecla_Voie } from '../../modules/declavoie/type';
 import { TDecla_Quartier } from '../../modules/declaqua/type';
 import BoxSelector from './boxSelector';
 import HeatmapLayer from "./heatmap";
+import { stat } from 'fs';
 
 export const enum POSITION_CLASSES {
     bottomleft = 'leaflet-bottom leaflet-left',
@@ -32,6 +32,8 @@ export default function Map() {
     const [arrondissementDecla, setArrondissementDecla] = useState<TDecla_Arrondissement[]>([]);
     const [voieDecla, setVoieDecla] = useState<TDecla_Voie[]>([]);
     const [quartierDecla, setQuartierDecla] = useState<TDecla_Quartier[]>([]);
+
+    const { pointStart, pointEnd } = useCounterStore((state) => state);
     
     useEffect(() => {
         const fetchData = async () => {
@@ -65,7 +67,7 @@ export default function Map() {
         <MapContainer
             center={[48.8589, 2.347]}
             zoom={13}
-            scrollWheelZoom={false}
+            scrollWheelZoom={true}
             style={{ height: "98vh", width: "100wh" }}
         >
             <TileLayer
@@ -138,10 +140,11 @@ export default function Map() {
                 <LayersControl.Overlay name="Quartiers">
                     <LayerGroup>
                         {quartierData.map((quartier) => {
+                            console.log(quartier.geometry.coordinates);
                             const data = quartierDecla.filter((decla)=> decla.quartier === quartier.properties.l_qu);
                             const coordinates = quartier.geometry.coordinates[0];
-                            if (coordinates && coordinates.length > 0 && data.length > 0) {
-                                const positions = coordinates.map((coord: number[]) => [coord[1], coord[0]]);
+                            if (data.length > 0) {
+                                const positions = coordinates.map((coord) => [coord[1], coord[0]]);
                                 return (
                                     <Polyline
                                         key={quartier._id}
