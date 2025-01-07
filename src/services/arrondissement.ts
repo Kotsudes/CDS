@@ -1,4 +1,6 @@
 import ApiService from "@/services/api";
+import { TArrondissement } from "@/modules/arrondissement/type"
+import { TDecla_Arrondissement } from "@/modules/declarartionArrondissement/type"
 
 export async function get() {
     try {
@@ -34,16 +36,23 @@ export async function get() {
 
         const parsedData = JSON.parse(data);
 
-        return parsedData;
+        return parsedData as TArrondissement[];
     }
     catch (error) {
         console.error("Erreur lors de la récupréations des données : ", error);
+        return [] as TArrondissement[];
     }
 
 }
 
 export async function getNames(): Promise<string[]> {
     const result = await fetch(`${ApiService.baseUrl}/arrondissement/name`, { method: 'GET' });
+    const json = await result.json();
+    return await json.data;
+}
+
+export async function getDeclarationArr(arrondissement: number): Promise<TDecla_Arrondissement> {
+    const result = await fetch(`${ApiService.baseUrl}/decla_par_arrondissement/${arrondissement}`, { method: 'GET' });
     const json = await result.json();
     return await json.data;
 }

@@ -10,6 +10,9 @@ export interface ICategoryDocument extends ICategory, Mongo.Document { }
 const categorySchema: Mongo.Schema = new Mongo.Schema({
     "_id": {
         type: String,
+    },
+    count: {
+        type: Number,
     }
 });
 

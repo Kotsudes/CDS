@@ -1,5 +1,7 @@
 "use client"
 import { useEffect, useState } from "react";
+import MyBarChart from "@/components/chart/chart";
+import MyTop10 from "@/components/chart/top10";
 import { useSearchParams } from 'next/navigation'
 import * as ArrondissementService from "@/services/arrondissement";
 import * as QuartierService from "@/services/quartier";
@@ -41,20 +43,27 @@ export default function Home() {
     }, [arrondissements.length, searchParams]);
 
     return (
-        <div className="flex flex-row-reverse gap-5 align-middle h-screen">
-            <div className="flex flex-col self-center">
-                <div className="relative pr-5">
-                    <Search />
-                    <div className="absolute top-1 right-1"><ModeToggle /></div>
+        <div className="flex flex-col gap-5">
+            <div className="flex flex-row gap-5 align-middle h-screen">
+                <div className="w-3/4 h-[900px] self-center">
+                    <Map
+                        arrondissements={arrondissements}
+                        quartiers={quartiers}
+                        voies={voies}
+                    />
+                </div>
+                <div className="flex flex-col self-center">
+                    <div className="relative pr-5">
+                        <Search />
+                        <div className="absolute top-1 right-1"><ModeToggle /></div>
 
+                    </div>
                 </div>
             </div>
-            <div className="w-3/4 h-[900px] self-center">
-                <Map
-                    arrondissements={arrondissements}
-                    quartiers={quartiers}
-                    voies={voies}
-                />
+            <div className="grid grid-cols-2 gap-4 w-full">
+                <MyBarChart />
+                <MyTop10 />
+             
             </div>
         </div>
     );

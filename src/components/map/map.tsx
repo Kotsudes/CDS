@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import { MapContainer, TileLayer, Polyline, Tooltip, LayersControl, LayerGroup, FeatureGroup, Rectangle } from 'react-leaflet'
+import { MapContainer, TileLayer, Polyline, Tooltip, LayersControl, LayerGroup, Rectangle } from 'react-leaflet'
 import { useCounterStore } from '@/providers/counter-store-provider'
 import 'leaflet/dist/leaflet.css';
 import { TArrondissement } from "@/modules/arrondissement/type"

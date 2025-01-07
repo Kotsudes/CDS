@@ -1,4 +1,6 @@
 import ApiService from "@/services/api";
+import { TVoie } from "@/modules/voie/type";
+import { TDecla_Voie } from "@/modules/declarartionVoie/type";
 
 export async function get() {
     try {
@@ -34,10 +36,17 @@ export async function get() {
 
         const parsedData = JSON.parse(data);
 
-        return parsedData;
+        return parsedData as TVoie[];
     }
     catch (error) {
         console.error("Erreur lors de la récupréations des données : ", error);
+        return [] as TVoie[];
     }
+}
+
+export async function getDeclarationVoie(voie: string): Promise<TDecla_Voie> {
+    const result = await fetch(`${ApiService.baseUrl}/decla_par_voie/${voie}`, { method: 'GET' });
+    const json = await result.json();
+    return await json.data;
 
 }

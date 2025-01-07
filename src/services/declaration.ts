@@ -1,3 +1,4 @@
+import { TDeclaration } from "@/modules/declaration/type";
 import ApiService from "@/services/api";
 
 export async function get(page: number, params?: string) {
@@ -36,7 +37,7 @@ export async function get(page: number, params?: string) {
 
         const parsedData = JSON.parse(data);
 
-        return parsedData;
+        return parsedData as TDeclaration[];
     }
     catch (error) {
         console.error("Erreur lors de la récupréations des données : ", error);
