@@ -15,7 +15,6 @@ import * as DeclarationService from "@/services/declaration";
 
 
 export default function Map() {
-    const [declarations, setDeclarations] = useState<TDeclaration[]>([]);
     const [arrondissementData, setArrondissementData] = useState<any[]>([]);
     const [voieData, setVoieData] = useState<any[]>([]);
     const [quartierData, setQuartierData] = useState<any[]>([]);
@@ -27,16 +26,7 @@ export default function Map() {
                 const arrondissementsData = await ArrondissementService.get();
                 const quartiersData = await QuartierService.get();
                 const voiesData = await VoieService.get();
-
-                // Récupération des déclarations paginées
-                const maxPages = 5; // Ajustez le nombre de pages si nécessaire
-                let allDeclarations: TDeclaration[] = [];
-                for (let i = 0; i < maxPages; i++) {
-                    const pageDeclarations = await DeclarationService.get(i);
-                    allDeclarations = allDeclarations.concat(pageDeclarations);
-                }
-                setDeclarations(allDeclarations);
-
+                
                 // Préparation des données supplémentaires
                 const arrondissementsWithDeclarations = await Promise.all(
                     arrondissementsData.map(async (arrondissement) => ({
@@ -153,31 +143,6 @@ export default function Map() {
                                             {quartier.properties.l_qu}, {quartier.declarationCount}
                                         </Tooltip>
                                     </Polyline>
-                                );
-                            }
-                            return null;
-                        })}
-                    </LayerGroup>
-                </LayersControl.Overlay>
-                <LayersControl.Overlay name="Déclarations">
-                    <LayerGroup>
-                        {declarations.map((declaration) => {
-                            const coordinates = declaration.geometry.coordinates;
-                            if (coordinates && coordinates.length > 0) {
-                                const positions: LatLngTuple = [coordinates[1], coordinates[0]];
-                                return (
-                                    <Circle
-                                        key={declaration._id}
-                                        color="red"
-                                        opacity={0.7}
-                                        fill
-                                        fillColor="red"
-                                        fillOpacity={0.5}
-                                        center={positions}
-                                        radius={10}
-                                    >
-                                        <Tooltip>{declaration.properties.id_dmr}</Tooltip>
-                                    </Circle>
                                 );
                             }
                             return null;
