@@ -15,6 +15,7 @@ import { TDecla_Quartier } from '../../modules/declaqua/type';
 import BoxSelector from './boxSelector';
 import HeatmapLayer from "./heatmap";
 import { stat } from 'fs';
+import { LatLngTuple } from 'leaflet';
 
 export const enum POSITION_CLASSES {
     bottomleft = 'leaflet-bottom leaflet-left',
@@ -139,27 +140,15 @@ export default function Map() {
                 </LayersControl.Overlay>
                 <LayersControl.Overlay name="Quartiers">
                     <LayerGroup>
-                        {quartierData.map((quartier) => {
-                            console.log(quartier.geometry.coordinates);
-                            const data = quartierDecla.filter((decla)=> decla.quartier === quartier.properties.l_qu);
+                        {quartierData.map((quartier: TQuartier) => {
                             const coordinates = quartier.geometry.coordinates[0];
-                            if (data.length > 0) {
-                                const positions = coordinates.map((coord) => [coord[1], coord[0]]);
-                                return (
-                                    <Polyline
-                                        key={quartier._id}
-                                        color="purple"
-                                        opacity={0.2}
-                                        fill
-                                        fillColor="black"
-                                        fillOpacity={0.1}
-                                        positions={positions}
-                                    >
-                                        <Tooltip sticky>
-                                            {quartier.properties.l_qu}, {data[0].numberDeclarations}
-                                        </Tooltip>
-                                    </Polyline>
-                                );
+                            if (coordinates && coordinates.length > 0) {
+                                const positions: LatLngTuple[] = coordinates.map((coord: number[]) => [coord[1], coord[0]]);
+                                return <Polyline key={quartier._id} color='purple' opacity={0.2} fill fillColor='black' fillOpacity={0.1} positions={positions} >
+                                    <Tooltip sticky>
+                                        {quartier.properties.l_qu}
+                                    </Tooltip>
+                                </Polyline>
                             }
                             return null;
                         })}
