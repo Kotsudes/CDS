@@ -16,4 +16,5 @@ const categorySchema: Mongo.Schema = new Mongo.Schema({
     }
 });
 
-export default Mongo.model<ICategoryDocument>("categories", categorySchema);
+export default Mongo.models.categories ||
+    Mongo.model<ICategoryDocument>("categories", categorySchema);

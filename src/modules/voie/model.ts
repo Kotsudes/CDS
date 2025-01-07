@@ -75,4 +75,5 @@ const voieSchema: Mongo.Schema = new Mongo.Schema({
     }
 });
 
-export default Mongo.model<IVoieDocument>("voie", voieSchema);
+export default Mongo.models.voie ||
+    Mongo.model<IVoieDocument>("voie", voieSchema);

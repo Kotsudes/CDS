@@ -8,21 +8,27 @@ const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
     baseDirectory: __dirname,
     recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
+    allConfig: js.configs.all,
 });
 
-export default [...compat.extends("next/core-web-vitals", "next/typescript"), {
-    rules: {
-        indent: ["error", 4],
+export default [
+    ...compat.extends("next/core-web-vitals", "next/typescript"),
+    {
+        rules: {
+            indent: ["error", 4, { SwitchCase: 1 }],
 
-        "@typescript-eslint/no-unused-vars": ["error", {
-            args: "all",
-            argsIgnorePattern: "^_",
-            caughtErrors: "all",
-            caughtErrorsIgnorePattern: "^_",
-            destructuredArrayIgnorePattern: "^_",
-            varsIgnorePattern: "^_",
-            ignoreRestSiblings: true,
-        }],
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                {
+                    args: "all",
+                    argsIgnorePattern: "^_",
+                    caughtErrors: "all",
+                    caughtErrorsIgnorePattern: "^_",
+                    destructuredArrayIgnorePattern: "^_",
+                    varsIgnorePattern: "^_",
+                    ignoreRestSiblings: true,
+                },
+            ],
+        },
     },
-}];
+];

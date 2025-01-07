@@ -23,7 +23,7 @@ export interface IQuartier {
     }
 }
 
-export interface IArrondissementDocument extends IQuartier, Mongo.Document { }
+export interface IQuartierDocument extends IQuartier, Mongo.Document { }
 
 
 const quartierSchema: Mongo.Schema = new Mongo.Schema({
@@ -75,4 +75,5 @@ const quartierSchema: Mongo.Schema = new Mongo.Schema({
     }
 });
 
-export default Mongo.model<IArrondissementDocument>("quartiers", quartierSchema);
+export default Mongo.models.quartiers ||
+    Mongo.model<IQuartierDocument>("quartiers", quartierSchema);
