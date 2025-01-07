@@ -60,13 +60,10 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-row gap-5">
-                <div className="flex-shrink-0 mt-10 ">
-                    <MyBarChart />
-                </div>
-                <div className="flex-shrink-0 mt-10 ">
-                    <MyTop10 />
-                </div>
+            <div className="grid grid-cols-2 gap-4 w-full">
+                <MyBarChart />
+                <MyTop10 />
+             
             </div>
         </div>
     );
