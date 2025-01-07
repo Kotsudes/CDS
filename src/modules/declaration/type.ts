@@ -17,7 +17,7 @@ export type TDeclaration = {
         ville: string;
         arrondissement: number;
         conseilquartier: string;
-        datedecl: string;
+        datedecl: Date;
         anneedecl: string;
         moisdecl: number;
         prefixe: string;

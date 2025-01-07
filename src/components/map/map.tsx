@@ -1,19 +1,27 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { MapContainer, TileLayer, Polyline, Tooltip, LayersControl, LayerGroup } from 'react-leaflet'
+import { MapContainer, TileLayer, Polyline, Tooltip, LayersControl, LayerGroup, Rectangle } from 'react-leaflet'
+import { useCounterStore } from '@/providers/counter-store-provider'
 import 'leaflet/dist/leaflet.css';
 import { TArrondissement } from "@/modules/arrondissement/type"
-import { TDeclaration } from '@/modules/declaration/type';
-import { LatLngTuple } from 'leaflet';
+import { LatLngTuple, LatLngExpression } from 'leaflet';
 import { TQuartier } from '@/modules/quartier/type';
 import { TVoie } from '@/modules/voie/type';
-import { LatLngExpression } from 'leaflet';
 import * as ArrondissementService from "@/services/arrondissement";
 import * as QuartierService from "@/services/quartier";
 import * as VoieService from "@/services/voies";
 import { TDecla_Arrondissement } from '@/modules/declaarr/type';
 import { TDecla_Voie } from '../../modules/declavoie/type';
 import { TDecla_Quartier } from '../../modules/declaqua/type';
+import BoxSelector from './boxSelector';
+import HeatmapLayer from "./heatmap";
+
+export const enum POSITION_CLASSES {
+    bottomleft = 'leaflet-bottom leaflet-left',
+    bottomright = 'leaflet-bottom leaflet-right',
+    topleft = 'leaflet-top leaflet-left',
+    topright = 'leaflet-top leaflet-right',
+}
 
 
 export default function Map() {
@@ -44,30 +52,6 @@ export default function Map() {
                 setArrondissementDecla(arronDecla);
                 setVoieDecla(voieDecla);
                 setQuartierDecla(quartierDecla);
-
-                // Préparation des données supplémentaires
-                /* const arrondissementsWithDeclarations = await Promise.all(
-                    arrondissementsData.map(async (arrondissement) => ({
-                        ...arrondissement,
-                        declarationCount: await ArrondissementService.getDeclarationArr(arrondissement.properties.c_ar),
-                    }))
-                );
-              
-
-                const voiesWithDeclarations = await Promise.all(
-                    voiesData.map(async (voie) => ({
-                        ...voie,
-                        declarationCount: await VoieService.getDeclarationVoie(voie.properties.l_longmin),
-                    }))
-                );
-               
-
-                const quartiersWithDeclarations = await Promise.all(
-                    quartiersData.map(async (quartier) => ({
-                        ...quartier,
-                        declarationCount: await QuartierService.getDeclarationQua(quartier.properties.l_qu),
-                    }))
-                );*/
               
             } catch (error) {
                 console.error("Erreur lors du chargement des données :", error);
@@ -85,10 +69,17 @@ export default function Map() {
             style={{ height: "98vh", width: "100wh" }}
         >
             <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            <HeatmapLayer />
+            <BoxSelector position={POSITION_CLASSES.bottomright} />
             <LayersControl position="topright">
+                <LayersControl.Overlay name="Zone sélectionnée">
+                    <LayerGroup>
+                        <Rectangle bounds={[[pointStart[1], pointStart[0]], [pointEnd[1], pointEnd[0]]]} fillOpacity={0.1} opacity={0.1} />
+                    </LayerGroup>
+                </LayersControl.Overlay>
+
                 <LayersControl.Overlay name="Arrondissements">
                     <LayerGroup>
                         {arrondissementData.map((arrondissement) => {

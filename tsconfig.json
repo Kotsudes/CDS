@@ -37,6 +37,9 @@
             "@/services/*": [
                 "./src/services/*"
             ],
+            "@/stores/*": [
+                "./src/stores/*"
+            ],
         },
         "target": "ES2023"
     },
@@ -47,7 +50,7 @@
         ".next/types/**/*.ts",
         "src/libs/database/utils/connection.ts",
         "src/libs/database/index.ts"
-    ],
+, "src/components/map/Untitled-1.jsx"    ],
     "exclude": [
         "node_modules"
     ]

@@ -17,7 +17,7 @@ export interface IDeclaration {
         ville: string;
         arrondissement: number;
         conseilquartier: string;
-        datedecl: string;
+        datedecl: Date;
         anneedecl: string;
         moisdecl: number;
         prefixe: string;
@@ -73,7 +73,7 @@ const declarationSchema: Mongo.Schema = new Mongo.Schema({
             type: String
         },
         datedecl: {
-            type: String
+            type: Date
         },
         anneedecl: {
             type: String
@@ -110,4 +110,5 @@ declarationSchema.index(
     }
 );
 
-export default Mongo.model<IDeclarationDocument>("declarations", declarationSchema);
+export default Mongo.models.declarations ||
+    Mongo.model<IDeclarationDocument>("declarations", declarationSchema);
