@@ -12,6 +12,7 @@ export type TQuartier = {
         c_qu: number;
         c_quinsee: number;
         l_qu: string;
+        c_ar: number;
         l_quoff: string;
         n_sq_co: number;
         surface: number;

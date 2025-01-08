@@ -10,11 +10,10 @@ import * as ArrondissementService from "@/services/arrondissement";
 import * as QuartierService from "@/services/quartier";
 import * as VoieService from "@/services/voies";
 import { TDecla_Arrondissement } from '@/modules/declaarr/type';
-import { TDecla_Voie } from '../../modules/declavoie/type';
-import { TDecla_Quartier } from '../../modules/declaqua/type';
+import { TDecla_Voie } from "@/modules/declavoie/type";
+import { TDecla_Quartier } from "@/modules/declaqua/type";
 import BoxSelector from './boxSelector';
 import HeatmapLayer from "./heatmap";
-import { stat } from 'fs';
 import { LatLngTuple } from 'leaflet';
 
 export const enum POSITION_CLASSES {
@@ -142,11 +141,13 @@ export default function Map() {
                     <LayerGroup>
                         {quartierData.map((quartier: TQuartier) => {
                             const coordinates = quartier.geometry.coordinates[0];
+                            const data = quartierDecla.filter((decla)=> decla?.quartier === quartier.properties.l_qu.toUpperCase() && decla?.arrondissement === quartier.properties.c_ar);
+                          
                             if (coordinates && coordinates.length > 0) {
                                 const positions: LatLngTuple[] = coordinates.map((coord: number[]) => [coord[1], coord[0]]);
                                 return <Polyline key={quartier._id} color='purple' opacity={0.2} fill fillColor='black' fillOpacity={0.1} positions={positions} >
                                     <Tooltip sticky>
-                                        {quartier.properties.l_qu}
+                                        {quartier.properties.l_qu}, {data[0] ? data[0].numberDeclarations : "unknown"}
                                     </Tooltip>
                                 </Polyline>
                             }

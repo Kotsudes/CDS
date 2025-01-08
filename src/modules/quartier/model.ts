@@ -49,6 +49,9 @@ const quartierSchema: Mongo.Schema = new Mongo.Schema({
         c_quinsee: {
             type: Number
         },
+        c_ar: {
+            type: Number
+        },
         l_qu: {
             type: String
         },
