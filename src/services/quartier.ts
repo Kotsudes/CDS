@@ -1,6 +1,6 @@
 import ApiService from "@/services/api";
 import { TQuartier } from "@/modules/quartier/type"
-import { TDecla_Quartier } from "@/modules/declaqua/type"
+import { TDecla_Quartier } from "@/modules/declarartionQuartier/type";
 
 export async function get(): Promise<TQuartier[]> {
     const result = await fetch(`${ApiService.baseUrl}/quartier`, { method: 'GET' });

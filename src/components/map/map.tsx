@@ -9,9 +9,9 @@ import { TVoie } from '@/modules/voie/type';
 import * as ArrondissementService from "@/services/arrondissement";
 import * as QuartierService from "@/services/quartier";
 import * as VoieService from "@/services/voies";
-import { TDecla_Arrondissement } from '@/modules/declaarr/type';
-import { TDecla_Voie } from "@/modules/declavoie/type";
-import { TDecla_Quartier } from "@/modules/declaqua/type";
+import { TDecla_Arrondissement } from '@/modules/declarartionArrondissement/type';
+import { TDecla_Voie } from "@/modules/declarartionVoie/type";
+import { TDecla_Quartier } from "@/modules/declarartionQuartier/type";
 import BoxSelector from './boxSelector';
 import HeatmapLayer from "./heatmap";
 import { LatLngTuple } from 'leaflet';
@@ -125,6 +125,7 @@ export default function Map() {
                                         fill
                                         fillColor="black"
                                         fillOpacity={0.1}
+                                        // @ts-expect-error The type of positions is not correct
                                         positions={positions}
                                     >
                                         <Tooltip sticky>
